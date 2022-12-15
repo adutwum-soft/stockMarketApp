@@ -2,8 +2,10 @@ package com.sacnoift.stockmartapp.di
 
 import com.sacnoift.stockmartapp.data.csv.CSVParser
 import com.sacnoift.stockmartapp.data.csv.CompanyListingsParser
+import com.sacnoift.stockmartapp.data.csv.IntraDayInfoParser
 import com.sacnoift.stockmartapp.data.repository.StockRepositoryImp
 import com.sacnoift.stockmartapp.domain.model.CompanyListing
+import com.sacnoift.stockmartapp.domain.model.IntraDayInfo
 import com.sacnoift.stockmartapp.domain.repository.StockRepository
 import dagger.Binds
 import dagger.Module
@@ -24,6 +26,12 @@ abstract class RepositoryModule {
     abstract fun bindsCompanyListingsParser(
         companyListingsParser: CompanyListingsParser
     ): CSVParser<CompanyListing>
+
+    @Binds
+    @Singleton
+    abstract fun bindsIntraDayInfoParser(
+        intraDayInfoParser: IntraDayInfoParser
+    ): CSVParser<IntraDayInfo>
 
     @Binds
     @Singleton

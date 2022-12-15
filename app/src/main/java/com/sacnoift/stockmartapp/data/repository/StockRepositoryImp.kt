@@ -3,10 +3,14 @@ package com.sacnoift.stockmartapp.data.repository
 import com.sacnoift.stockmartapp.data.csv.CSVParser
 import com.sacnoift.stockmartapp.data.csv.CompanyListingsParser
 import com.sacnoift.stockmartapp.data.local.StockDatabase
+import com.sacnoift.stockmartapp.data.mapper.toCompanyInfo
 import com.sacnoift.stockmartapp.data.mapper.toCompanyListing
 import com.sacnoift.stockmartapp.data.mapper.toCompanyListingEntity
 import com.sacnoift.stockmartapp.data.remote.StockApi
+import com.sacnoift.stockmartapp.data.remote.dto.CompanyInfoDto
+import com.sacnoift.stockmartapp.domain.model.CompanyInfo
 import com.sacnoift.stockmartapp.domain.model.CompanyListing
+import com.sacnoift.stockmartapp.domain.model.IntraDayInfo
 import com.sacnoift.stockmartapp.domain.repository.StockRepository
 import com.sacnoift.stockmartapp.util.Constants
 import com.sacnoift.stockmartapp.util.Resource
@@ -25,7 +29,8 @@ import javax.inject.Singleton
 class StockRepositoryImp @Inject constructor(
     private val api: StockApi,
     private val db: StockDatabase,
-    private val companyListingsParser: CSVParser<CompanyListing>
+    private val companyListingsParser: CSVParser<CompanyListing>,
+    private val intraDayInfoParser: CSVParser<IntraDayInfo>
 ): StockRepository {
     private val dao = db.dao
 
@@ -70,6 +75,42 @@ class StockRepositoryImp @Inject constructor(
                 ))
                 emit(Resource.Loading(false))
             }
+        }
+    }
+
+    override suspend fun getIntraDayInfo(symbol: String): Resource<List<IntraDayInfo>> {
+        return try {
+            val response = api.getIntraDayInfo(symbol = symbol)
+            val result = intraDayInfoParser.parse(response.byteStream())
+            Resource.Success(result)
+        }catch (e: IOException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "Couldn't load intra day info"
+            )
+        }catch (e: HttpException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "Couldn't load intra day info"
+            )
+        }
+    }
+
+    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
+        return try {
+            val response = api.getCompanyInfo(symbol = symbol)
+            val result = response.toCompanyInfo()
+            Resource.Success(result)
+        }catch (e: IOException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "Couldn't load Company info for $symbol"
+            )
+        }catch (e: HttpException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "Couldn't load Company info for $symbol"
+            )
         }
     }
 }
