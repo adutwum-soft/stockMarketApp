@@ -98,9 +98,8 @@ class StockRepositoryImp @Inject constructor(
 
     override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
         return try {
-            val response = api.getCompanyInfo(symbol = symbol)
-            val result = response.toCompanyInfo()
-            Resource.Success(result)
+            val result = api.getCompanyInfo(symbol = symbol)
+            Resource.Success(result.toCompanyInfo())
         }catch (e: IOException){
             e.printStackTrace()
             Resource.Error(

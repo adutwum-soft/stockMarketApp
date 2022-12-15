@@ -18,6 +18,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sacnoift.stockmartapp.presentation.destinations.CompanyInfoScreenDestination
 
 /**
  * Created by Patrick Adutwum on 15/12/2022.
@@ -68,7 +69,9 @@ fun CompanyListingsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                // TODO: Navigate to detail screen
+                                navigator.navigate(
+                                    CompanyInfoScreenDestination(company.symbol)
+                                )
                             }
                             .padding(16.dp)
                     )

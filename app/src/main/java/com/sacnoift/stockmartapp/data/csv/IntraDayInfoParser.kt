@@ -9,9 +9,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
+import java.util.Calendar.MONDAY
+import java.util.Calendar.SUNDAY
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.days
 
 /**
  * Created by Patrick Adutwum on 14/12/2022.
@@ -32,7 +37,13 @@ class IntraDayInfoParser @Inject constructor(): CSVParser<IntraDayInfo> {
                     dto.toIntraDayInfo()
                 }
                 .filter {
-                    it.date.dayOfMonth == LocalDateTime.now().minusDays(1).dayOfMonth
+                    val calender = Calendar.getInstance()
+                    var daysToSub = when (calender.get(Calendar.DAY_OF_WEEK)) {
+                        SUNDAY -> 2
+                        MONDAY -> 3
+                        else -> 1
+                    }
+                    it.date.dayOfMonth == LocalDate.now().minusDays(daysToSub.toLong()).dayOfMonth
                 }
                 .sortedBy {
                     it.date.hour
