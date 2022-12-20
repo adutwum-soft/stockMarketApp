@@ -2,15 +2,13 @@ package com.sacnoift.stockmartapp.presentation.company_info
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -73,19 +71,19 @@ fun CompanyInfoScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "Currency: ${company.currency}",
-                        fontSize = 14.sp,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Sector: ${company.sector}",
                         fontSize = 14.sp,
-                        modifier = Modifier.fillMaxWidth(),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Currency: ${company.currency}",
+                        fontSize = 14.sp,
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
